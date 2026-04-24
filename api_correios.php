@@ -2,13 +2,11 @@
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
-require_once __DIR__ . '/conexao.php';
+include("conexao.php");
 
 // Parâmetros
 $cep_destino = preg_replace('/[^0-9]/', '', $_GET['cep'] ?? '');
-$produtos_raw = $_GET['produtos'] ?? '[]';
-$produtos = json_decode(urldecode($produtos_raw), true);
-if (!is_array($produtos)) $produtos = [];
+$produtos = json_decode($_GET['produtos'] ?? '[]', true);
 
 if (empty($cep_destino) || strlen($cep_destino) != 8) {
     echo json_encode(['error' => 'CEP de destino inválido']);
@@ -42,7 +40,6 @@ if ($valor_total >= 299) {
     echo json_encode([
         'success' => true,
         'frete_gratis' => true,
-        'valor_total_produtos' => number_format($valor_total, 2, ',', '.'),
         'opcoes' => [
             [
                 'codigo' => 'FREE',
@@ -90,17 +87,15 @@ foreach ($servicos as $codigo => $nome) {
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_TIMEOUT, 15);
     $xml = curl_exec($ch);
-    $curl_err = curl_errno($ch) ? curl_error($ch) : null;
     curl_close($ch);
-
+    
     if ($xml) {
-        libxml_use_internal_errors(true);
         $xml_obj = simplexml_load_string($xml);
         if ($xml_obj && isset($xml_obj->cServico)) {
             $servico = $xml_obj->cServico;
-            $valor = floatval(str_replace(',', '.', (string)$servico->Valor));
+            $valor = floatval(str_replace(',', '.', $servico->Valor));
             $prazo = intval($servico->PrazoEntrega);
-
+            
             if ($valor > 0) {
                 $opcoes_frete[] = [
                     'codigo' => $codigo,
@@ -111,12 +106,7 @@ foreach ($servicos as $codigo => $nome) {
                     'prazo_texto' => $prazo . ' dia(s) útil(eis)'
                 ];
             }
-        } else {
-            // registrar erro de parsing (não é crítico)
-            error_log('Correios XML parse error for service ' . $codigo);
         }
-    } else {
-        error_log('Erro CURL Correios: ' . ($curl_err ?? 'vazio'));
     }
 }
 
@@ -147,8 +137,8 @@ echo json_encode([
     'frete_gratis' => false,
     'cep_origem' => $cep_origem,
     'cep_destino' => $cep_destino,
-    'peso_total' => number_format($peso_total, 2, ',', '.') . ' kg',
-    'valor_total_produtos' => number_format($valor_total, 2, ',', '.'),
+    'peso_total' => number_format($peso_total, 2) . ' kg',
+    'valor_total_produtos' => number_format($valor_total, 2),
     'opcoes' => $opcoes_frete
 ]);
 ?>
