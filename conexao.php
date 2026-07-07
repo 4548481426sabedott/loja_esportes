@@ -3,6 +3,7 @@ $hosts = ["localhost", "127.0.0.1"];
 $user = "root";
 $pass = "";
 $db = "loja_esportes";
+$port = 3307;
 
 $conn = null;
 $lastError = '';
@@ -11,7 +12,7 @@ $connectedHost = null;
 foreach ($hosts as $host) {
     try {
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-        $conn = mysqli_connect($host, $user, $pass, $db);
+        $conn = mysqli_connect($host, $user, $pass, $db, $port);
         if ($conn) {
             mysqli_set_charset($conn, "utf8");
             $connectedHost = $host;
