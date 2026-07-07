@@ -1,6 +1,7 @@
 <?php
-include("header.php");
+// Processar ANTES de qualquer output (antes de include header.php)
 include("config_mail.php");
+require_once("conexao.php");
 
 if (!esta_logado()) {
     $_SESSION['mensagem'] = [
@@ -91,7 +92,14 @@ if (isset($_POST['finalizar'])) {
             // Limpar carrinho
             unset($_SESSION['carrinho']);
             unset($_SESSION['carrinho_detalhes']);
-            
+            // Caso pagamento por PIX, gerar QR e salvar na sessão para exibição
+            if ($forma_pagamento === 'pix') {
+                require_once __DIR__ . '/pix_helper.php';
+                $reference = "Pedido #" . str_pad($pedido_id, 6, '0', STR_PAD_LEFT);
+                $pix_result = generate_pix_qr(number_format($total_geral, 2, '.', ''), $reference);
+                $_SESSION['pix_qr'] = $pix_result;
+            }
+
             $_SESSION['mensagem'] = [
                 'tipo' => 'success',
                 'texto' => 'Pedido realizado com sucesso! Número do pedido: #' . str_pad($pedido_id, 6, '0', STR_PAD_LEFT)
@@ -136,6 +144,9 @@ if (empty($itens_carrinho)) {
     ];
     redirect("carrinho.php");
 }
+
+// Incluir header DEPOIS de todo processamento
+include("header.php");
 ?>
 
 <div class="container">
@@ -250,33 +261,80 @@ if (empty($itens_carrinho)) {
                 
                 <h3 style="margin: 2rem 0 1.5rem;">4. Forma de Pagamento</h3>
                 
-                <div class="payment-methods">
-                    <div class="payment-method" onclick="selecionarPagamento(this, 'cartao_credito')">
-                        <i class="fas fa-credit-card"></i>
-                        <p>Cartão de Crédito</p>
-                        <small style="color: #666;">Até 6x sem juros</small>
-                    </div>
+                <div class="payment-methods" style="display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 1.5rem !important; margin-bottom: 2rem !important;">
+                    <button type="button" class="payment-btn" style="display: flex !important; align-items: center !important; gap: 1.2rem !important; padding: 1.5rem !important; border: 2px solid #e2e8f0 !important; background: white !important; border-radius: 1rem !important; cursor: pointer !important; font-family: 'Inter', sans-serif !important; text-align: left !important; position: relative !important; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important; width: 100% !important; min-height: 120px !important;" onclick="selecionarPagamento(this, 'cartao_credito'); return false;">
+                        <div class="payment-icon" style="flex-shrink: 0; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f97316, #dc2626); border-radius: 1rem; color: white; font-size: 1.8rem;">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div class="payment-info" style="flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center;">
+                            <p class="payment-title" style="margin: 0; font-weight: 700; font-size: 1rem; color: #1e293b; line-height: 1.2;">Cartão de Crédito</p>
+                            <small class="payment-desc" style="display: block; color: #64748b; font-size: 0.85rem; margin-top: 0.3rem; font-weight: 500;">Até 6x sem juros</small>
+                        </div>
+                        <div class="payment-check" style="flex-shrink: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: transparent; font-size: 1.5rem;">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </button>
                     
-                    <div class="payment-method" onclick="selecionarPagamento(this, 'cartao_debito')">
-                        <i class="fas fa-credit-card"></i>
-                        <p>Cartão de Débito</p>
-                        <small style="color: #666;">Pagamento na entrega</small>
-                    </div>
+                    <button type="button" class="payment-btn" style="display: flex !important; align-items: center !important; gap: 1.2rem !important; padding: 1.5rem !important; border: 2px solid #e2e8f0 !important; background: white !important; border-radius: 1rem !important; cursor: pointer !important; font-family: 'Inter', sans-serif !important; text-align: left !important; position: relative !important; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important; width: 100% !important; min-height: 120px !important;" onclick="selecionarPagamento(this, 'cartao_debito'); return false;">
+                        <div class="payment-icon" style="flex-shrink: 0; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f97316, #dc2626); border-radius: 1rem; color: white; font-size: 1.8rem;">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div class="payment-info" style="flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center;">
+                            <p class="payment-title" style="margin: 0; font-weight: 700; font-size: 1rem; color: #1e293b; line-height: 1.2;">Cartão de Débito</p>
+                            <small class="payment-desc" style="display: block; color: #64748b; font-size: 0.85rem; margin-top: 0.3rem; font-weight: 500;">Pagamento instantâneo</small>
+                        </div>
+                        <div class="payment-check" style="flex-shrink: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: transparent; font-size: 1.5rem;">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </button>
                     
-                    <div class="payment-method" onclick="selecionarPagamento(this, 'pix')">
-                        <i class="fas fa-qrcode"></i>
-                        <p>PIX</p>
-                        <small style="color: #666;">Desconto de 5%</small>
-                    </div>
+                    <button type="button" class="payment-btn" style="display: flex !important; align-items: center !important; gap: 1.2rem !important; padding: 1.5rem !important; border: 2px solid #e2e8f0 !important; background: white !important; border-radius: 1rem !important; cursor: pointer !important; font-family: 'Inter', sans-serif !important; text-align: left !important; position: relative !important; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important; width: 100% !important; min-height: 120px !important;" onclick="selecionarPagamento(this, 'pix'); return false;">
+                        <div class="payment-icon" style="flex-shrink: 0; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f97316, #dc2626); border-radius: 1rem; color: white; font-size: 1.8rem;">
+                            <i class="fas fa-qrcode"></i>
+                        </div>
+                        <div class="payment-info" style="flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center;">
+                            <p class="payment-title" style="margin: 0; font-weight: 700; font-size: 1rem; color: #1e293b; line-height: 1.2;">PIX</p>
+                            <small class="payment-desc" style="display: block; color: #64748b; font-size: 0.85rem; margin-top: 0.3rem; font-weight: 500;">Desconto de 5%</small>
+                        </div>
+                        <div class="payment-check" style="flex-shrink: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: transparent; font-size: 1.5rem;">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </button>
                     
-                    <div class="payment-method" onclick="selecionarPagamento(this, 'boleto')">
-                        <i class="fas fa-barcode"></i>
-                        <p>Boleto Bancário</p>
-                        <small style="color: #666;">Vencimento em 3 dias</small>
-                    </div>
+                    <button type="button" class="payment-btn" style="display: flex !important; align-items: center !important; gap: 1.2rem !important; padding: 1.5rem !important; border: 2px solid #e2e8f0 !important; background: white !important; border-radius: 1rem !important; cursor: pointer !important; font-family: 'Inter', sans-serif !important; text-align: left !important; position: relative !important; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important; width: 100% !important; min-height: 120px !important;" onclick="selecionarPagamento(this, 'boleto'); return false;">
+                        <div class="payment-icon" style="flex-shrink: 0; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f97316, #dc2626); border-radius: 1rem; color: white; font-size: 1.8rem;">
+                            <i class="fas fa-barcode"></i>
+                        </div>
+                        <div class="payment-info" style="flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center;">
+                            <p class="payment-title" style="margin: 0; font-weight: 700; font-size: 1rem; color: #1e293b; line-height: 1.2;">Boleto Bancário</p>
+                            <small class="payment-desc" style="display: block; color: #64748b; font-size: 0.85rem; margin-top: 0.3rem; font-weight: 500;">Vencimento em 3 dias</small>
+                        </div>
+                        <div class="payment-check" style="flex-shrink: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: transparent; font-size: 1.5rem;">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </button>
                 </div>
                 
                 <input type="hidden" name="forma_pagamento" id="forma_pagamento" required>
+                
+                <style>
+                    .payment-btn:hover {
+                        border-color: #f97316 !important;
+                        background: #fef9f5 !important;
+                        transform: translateY(-4px) !important;
+                        box-shadow: 0 12px 24px rgba(249, 115, 22, 0.2) !important;
+                    }
+                    
+                    .payment-btn.selected {
+                        border-color: #10b981 !important;
+                        background: linear-gradient(135deg, #f0fdf4, #ecfdf5) !important;
+                        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15), 0 8px 20px rgba(16, 185, 129, 0.2) !important;
+                    }
+                    
+                    .payment-btn.selected .payment-check {
+                        color: #10b981 !important;
+                    }
+                </style>
             </form>
         </div>
         
@@ -315,13 +373,36 @@ if (empty($itens_carrinho)) {
 let pagamentoSelecionado = null;
 let freteSelecionado = null;
 
-function selecionarPagamento(elemento, tipo) {
-    document.querySelectorAll('.payment-method').forEach(el => {
-        el.classList.remove('selected');
+function selecionarPagamento(btnElement, tipo) {
+    // Remover classe selected de todos os botões
+    const todos = document.querySelectorAll('.payment-btn');
+    todos.forEach(function(btn) {
+        btn.classList.remove('selected');
     });
-    elemento.classList.add('selected');
+    
+    // Adicionar classe selected ao botão clicado
+    btnElement.classList.add('selected');
+    
+    // Salvar valor no input hidden
     document.getElementById('forma_pagamento').value = tipo;
+    
+    // Log para debug
+    console.log('Pagamento selecionado: ' + tipo);
+    
+    return false;
 }
+
+// Adicionar listeners aos elementos filhos também
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.payment-method').forEach(element => {
+        element.addEventListener('click', function(e) {
+            const tipo = this.getAttribute('onclick')?.match(/'([^']+)'$/)?.[1];
+            if (tipo) {
+                selecionarPagamento(this, tipo);
+            }
+        });
+    });
+});
 
 function buscarCEP(cep) {
     cep = cep.replace(/\D/g, '');

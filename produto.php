@@ -12,6 +12,18 @@ if (!$produto) {
 
 $cores = !empty($produto['cores']) ? explode(',', $produto['cores']) : ['Branco', 'Preto', 'Azul', 'Vermelho'];
 $tamanhos = !empty($produto['tamanhos']) ? explode(',', $produto['tamanhos']) : ['P', 'M', 'G', 'GG'];
+$tamanhos_desc = !empty($produto['tamanhos_desc']) ? explode(',', $produto['tamanhos_desc']) : [];
+
+// Criar um array associativo tamanho => descrição
+$tamanhos_desc_array = [];
+foreach ($tamanhos_desc as $td) {
+    if (strpos($td, '(') !== false) {
+        $parts = explode('(', $td);
+        $tamanho_key = trim($parts[0]);
+        $desc_full = '(' . $parts[1];
+        $tamanhos_desc_array[$tamanho_key] = $desc_full;
+    }
+}
 ?>
 
 <div class="container my-5">
@@ -79,7 +91,7 @@ $tamanhos = !empty($produto['tamanhos']) ? explode(',', $produto['tamanhos']) : 
                     <div id="corError" class="text-danger small mt-1" style="display: none;">Selecione uma cor</div>
                 </div>
                 
-                <!-- TAMANHOS -->
+                <!-- TAMANHOS COM DESCRIÇÃO EM CENTÍMETROS -->
                 <div class="mb-4">
                     <label class="fw-bold mb-3">
                         <i class="fas fa-ruler-combined me-2"></i> Escolha o Tamanho:
@@ -87,11 +99,16 @@ $tamanhos = !empty($produto['tamanhos']) ? explode(',', $produto['tamanhos']) : 
                     <div class="d-flex gap-2 flex-wrap" id="sizeOptions">
                         <?php foreach($tamanhos as $tamanho): 
                             $tamanhoTrim = trim($tamanho);
+                            $desc_tamanho = isset($tamanhos_desc_array[$tamanhoTrim]) ? $tamanhos_desc_array[$tamanhoTrim] : '';
                         ?>
-                            <button type="button" class="size-option btn btn-outline-secondary" 
+                            <button type="button" class="size-option btn btn-outline-secondary position-relative" 
                                     data-tamanho="<?php echo htmlspecialchars($tamanhoTrim); ?>"
-                                    style="min-width: 60px; border-radius: 10px;">
+                                    data-desc="<?php echo htmlspecialchars($desc_tamanho); ?>"
+                                    style="min-width: 70px; border-radius: 10px;">
                                 <?php echo htmlspecialchars($tamanhoTrim); ?>
+                                <?php if($desc_tamanho): ?>
+                                    <br><small style="font-size: 0.65rem;"><?php echo htmlspecialchars($desc_tamanho); ?></small>
+                                <?php endif; ?>
                             </button>
                         <?php endforeach; ?>
                     </div>
