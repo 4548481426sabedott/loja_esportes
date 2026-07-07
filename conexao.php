@@ -94,6 +94,7 @@ if (!function_exists('verificar_tabelas')) {
                 forma_pagamento VARCHAR(50),
                 endereco_entrega TEXT,
                 status VARCHAR(50) DEFAULT 'pendente',
+                frete DECIMAL(10,2) NOT NULL DEFAULT 0,
                 data_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
             )";
