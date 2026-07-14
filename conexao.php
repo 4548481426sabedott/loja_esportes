@@ -1,30 +1,34 @@
 <?php
 $hosts = ["localhost", "127.0.0.1"];
+$ports = [3307, 3306];
 $user = "root";
 $pass = "";
 $db = "loja_esportes";
-$port = 3307;
 
 $conn = null;
 $lastError = '';
 $connectedHost = null;
+$attemptedHosts = [];
 
 foreach ($hosts as $host) {
-    try {
-        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-        $conn = mysqli_connect($host, $user, $pass, $db, $port);
-        if ($conn) {
-            mysqli_set_charset($conn, "utf8");
-            $connectedHost = $host;
-            break;
+    foreach ($ports as $port) {
+        $attemptedHosts[] = "$host:$port";
+        try {
+            mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+            $conn = mysqli_connect($host, $user, $pass, $db, $port);
+            if ($conn) {
+                mysqli_set_charset($conn, "utf8");
+                $connectedHost = "$host:$port";
+                break 2;
+            }
+        } catch (mysqli_sql_exception $e) {
+            $lastError = $e->getMessage();
         }
-    } catch (mysqli_sql_exception $e) {
-        $lastError = $e->getMessage();
     }
 }
 
 if (!$conn) {
-    $attempted = implode(', ', $hosts);
+    $attempted = implode(', ', $attemptedHosts);
     echo '<!DOCTYPE html><html lang="pt-br"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Erro de Conexão</title><style>body{font-family:Arial,Helvetica,sans-serif;background:#f4f4f4;color:#333;margin:0;padding:0;display:flex;align-items:center;justify-content:center;min-height:100vh;} .box{max-width:720px;width:100%;background:#fff;border-radius:16px;box-shadow:0 16px 40px rgba(0,0,0,.08);padding:2rem;} h1{margin-top:0;color:#d32f2f;} p{line-height:1.6;}</style></head><body><div class="box"><h1>Erro na conexão com o banco de dados</h1><p>Não foi possível conectar ao MySQL usando os hosts: <strong>' . htmlspecialchars($attempted, ENT_QUOTES, 'UTF-8') . '</strong>.</p><p>Verifique se o serviço MySQL/MariaDB está ativo no XAMPP e se o banco de dados <strong>' . htmlspecialchars($db, ENT_QUOTES, 'UTF-8') . '</strong> existe.</p><p>Mensagem técnica: <strong>' . htmlspecialchars($lastError ?: 'Erro de conexão desconhecido', ENT_QUOTES, 'UTF-8') . '</strong></p></div></body></html>';
     exit;
 }
@@ -94,7 +98,6 @@ if (!function_exists('verificar_tabelas')) {
                 forma_pagamento VARCHAR(50),
                 endereco_entrega TEXT,
                 status VARCHAR(50) DEFAULT 'pendente',
-                frete DECIMAL(10,2) NOT NULL DEFAULT 0,
                 data_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
             )";

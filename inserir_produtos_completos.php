@@ -715,6 +715,84 @@ $tenis = [
         'cores' => 'Azul/Verde,Preto/Prata,Branco/Rosa',
         'tamanhos' => '37,38,39,40,41,42,43,44',
         'tamanhos_desc' => '37(24cm),38(24.5cm),39(25cm),40(25.5cm),41(26cm),42(26.5cm),43(27.5cm),44(28cm)'
+    ],
+    [
+        'nome' => 'Tênis Adidas Gazelle Indoor',
+        'categoria' => 'Tênis',
+        'marca' => 'Adidas',
+        'preco' => 459.90,
+        'descricao' => '👟 ESTILO E CONFORTO PARA QUADRA INTERNA. Solado aderente e design clássico da Gazelle.',
+        'imagem' => 'https://via.placeholder.com/500?text=Adidas+Gazelle+Indoor',
+        'estoque' => 60,
+        'destaque' => 0,
+        'cores' => 'Preto/Branco,Branco/Preto,Azul',
+        'tamanhos' => '36,37,38,39,40,41,42,43,44',
+        'tamanhos_desc' => '36(23.5cm),37(24cm),38(24.5cm),39(25cm),40(25.5cm),41(26cm),42(26.5cm),43(27.5cm),44(28cm)'
+    ],
+    [
+        'nome' => 'Tênis Nike Zoom Winflo 10',
+        'categoria' => 'Tênis',
+        'marca' => 'Nike',
+        'preco' => 499.90,
+        'descricao' => '🏃 CORRIDA LEVE E DINÂMICA! Amortecimento Zoom e cabedal respirável.',
+        'imagem' => 'https://via.placeholder.com/500?text=Nike+Zoom+Winflo+10',
+        'estoque' => 70,
+        'destaque' => 1,
+        'cores' => 'Preto,Branco,Azul,Verde',
+        'tamanhos' => '37,38,39,40,41,42,43,44',
+        'tamanhos_desc' => '37(24cm),38(24.5cm),39(25cm),40(25.5cm),41(26cm),42(26.5cm),43(27.5cm),44(28cm)'
+    ],
+    [
+        'nome' => 'Tênis Puma Enzo Street',
+        'categoria' => 'Tênis',
+        'marca' => 'Puma',
+        'preco' => 379.90,
+        'descricao' => '🧨 DESIGN URBANO COM SUPORTE TOTAL. Ideal para lifestyle e treino leve.',
+        'imagem' => 'https://via.placeholder.com/500?text=Puma+Enzo+Street',
+        'estoque' => 55,
+        'destaque' => 0,
+        'cores' => 'Preto/Branco,Branco/Preto,Vermelho',
+        'tamanhos' => '37,38,39,40,41,42,43,44',
+        'tamanhos_desc' => '37(24cm),38(24.5cm),39(25cm),40(25.5cm),41(26cm),42(26.5cm),43(27.5cm),44(28cm)'
+    ],
+    [
+        'nome' => 'Tênis New Balance Fresh Foam X 1080',
+        'categoria' => 'Tênis',
+        'marca' => 'New Balance',
+        'preco' => 929.90,
+        'descricao' => '☁️ AMORTECIMENTO MACIO PARA LONGAS DISTÂNCIAS. Versão premium com retorno de energia.',
+        'imagem' => 'https://via.placeholder.com/500?text=New+Balance+1080',
+        'estoque' => 40,
+        'destaque' => 1,
+        'cores' => 'Cinza/Prata,Preto,Azul',
+        'tamanhos' => '37,38,39,40,41,42,43,44',
+        'tamanhos_desc' => '37(24cm),38(24.5cm),39(25cm),40(25.5cm),41(26cm),42(26.5cm),43(27.5cm),44(28cm)'
+    ],
+    [
+        'nome' => 'Tênis Under Armour Charged Assert',
+        'categoria' => 'Tênis',
+        'marca' => 'Under Armour',
+        'preco' => 419.90,
+        'descricao' => '⚡ TENIS MULTIUSO PARA TREINO E CORRIDA. Amortecimento Charged para resposta rápida.',
+        'imagem' => 'https://via.placeholder.com/500?text=UA+Charged+Assert',
+        'estoque' => 65,
+        'destaque' => 0,
+        'cores' => 'Preto,Branco,Azul',
+        'tamanhos' => '37,38,39,40,41,42,43,44',
+        'tamanhos_desc' => '37(24cm),38(24.5cm),39(25cm),40(25.5cm),41(26cm),42(26.5cm),43(27.5cm),44(28cm)'
+    ],
+    [
+        'nome' => 'Tênis Saucony Kinvara 13',
+        'categoria' => 'Tênis',
+        'marca' => 'Saucony',
+        'preco' => 599.90,
+        'descricao' => '🏁 LEVEZA PARA TREINOS RÁPIDOS. Silhueta minimalista e amortecimento responsivo.',
+        'imagem' => 'https://via.placeholder.com/500?text=Saucony+Kinvara+13',
+        'estoque' => 50,
+        'destaque' => 0,
+        'cores' => 'Preto/Verde,Branco/Rosa,Azul',
+        'tamanhos' => '37,38,39,40,41,42,43,44',
+        'tamanhos_desc' => '37(24cm),38(24.5cm),39(25cm),40(25.5cm),41(26cm),42(26.5cm),43(27.5cm),44(28cm)'
     ]
 ];
 
@@ -849,6 +927,58 @@ $meias = [
         'cores' => 'Branco,Preto,Azul',
         'tamanhos' => '37-40,41-44',
         'tamanhos_desc' => '37-40(24-25.5cm pé),41-44(26-28cm pé)'
+    ],
+    [
+        'nome' => 'Meião Nike Everyday Max',
+        'categoria' => 'Meias',
+        'marca' => 'Nike',
+        'preco' => 54.90,
+        'descricao' => '🧦 MEIA COM AMORTECIMENTO EXTRA. Ideal para treinos e uso diário.',
+        'imagem' => 'https://via.placeholder.com/500?text=Meiao+Nike+Everyday+Max',
+        'estoque' => 220,
+        'destaque' => 0,
+        'cores' => 'Preto,Branco,Cinza',
+        'tamanhos' => '37-40,41-44',
+        'tamanhos_desc' => '37-40(24-25.5cm pé),41-44(26-28cm pé)'
+    ],
+    [
+        'nome' => 'Meião Adidas Alphaskin',
+        'categoria' => 'Meias',
+        'marca' => 'Adidas',
+        'preco' => 64.90,
+        'descricao' => '💨 MEIA TECH COM MATERIAL ALPHASKIN QUE AJUDA NA RESPIRAÇÃO DO PÉ.',
+        'imagem' => 'https://via.placeholder.com/500?text=Meiao+Adidas+Alphaskin',
+        'estoque' => 170,
+        'destaque' => 0,
+        'cores' => 'Branco,Preto,Azul,Rosa',
+        'tamanhos' => '37-40,41-44',
+        'tamanhos_desc' => '37-40(24-25.5cm pé),41-44(26-28cm pé)'
+    ],
+    [
+        'nome' => 'Meião Puma Performance',
+        'categoria' => 'Meias',
+        'marca' => 'Puma',
+        'preco' => 59.90,
+        'descricao' => '⚽ MEIA PERFORMANCE COM SUPORTE NO ARCO E TECIDO RESPIRÁVEL.',
+        'imagem' => 'https://via.placeholder.com/500?text=Meiao+Puma+Performance',
+        'estoque' => 180,
+        'destaque' => 0,
+        'cores' => 'Preto,Branco,Vermelho',
+        'tamanhos' => '37-40,41-44',
+        'tamanhos_desc' => '37-40(24-25.5cm pé),41-44(26-28cm pé)'
+    ],
+    [
+        'nome' => 'Meião Umbro Training',
+        'categoria' => 'Meias',
+        'marca' => 'Umbro',
+        'preco' => 49.90,
+        'descricao' => '🏋️ MEIA DE TREINO COM COMPRESSÃO MODERADA E TOQUE CONFORTÁVEL.',
+        'imagem' => 'https://via.placeholder.com/500?text=Meiao+Umbro+Training',
+        'estoque' => 140,
+        'destaque' => 0,
+        'cores' => 'Branco,Preto,Azul',
+        'tamanhos' => '37-40,41-44',
+        'tamanhos_desc' => '37-40(24-25.5cm pé),41-44(26-28cm pé)'
     ]
 ];
 
@@ -970,6 +1100,58 @@ $equipamentos = [
         'cores' => 'Preto,Azul Marinho,Cinza',
         'tamanhos' => 'Único',
         'tamanhos_desc' => 'Único(50x30x20cm)'
+    ],
+    [
+        'nome' => 'Colete de Treino Nike Essentials',
+        'categoria' => 'Equipamentos',
+        'marca' => 'Nike',
+        'preco' => 129.90,
+        'descricao' => '🏋️ COLETE LEVE PARA TREINO INTERVALADO. Ajustável e respirável.',
+        'imagem' => 'https://via.placeholder.com/500?text=Colete+Nike+Essentials',
+        'estoque' => 60,
+        'destaque' => 0,
+        'cores' => 'Preto,Azul,Verde',
+        'tamanhos' => 'P, M, G, XG',
+        'tamanhos_desc' => 'P(40-50kg),M(50-65kg),G(65-80kg),XG(80kg+)'
+    ],
+    [
+        'nome' => 'Kit de Bandeiras de Escanteio',
+        'categoria' => 'Equipamentos',
+        'marca' => 'Penalty',
+        'preco' => 149.90,
+        'descricao' => '🚩 KIT COMPLETO PARA MARCAR ESCANTEIOS EM CAMPO. Leve e fácil de montar.',
+        'imagem' => 'https://via.placeholder.com/500?text=Kit+Bandeiras+Escanteio',
+        'estoque' => 35,
+        'destaque' => 0,
+        'cores' => 'Amarelo/Preto',
+        'tamanhos' => 'Único',
+        'tamanhos_desc' => 'Único(4 bandeiras + suporte)'
+    ],
+    [
+        'nome' => 'Squeeze Térmico Adidas',
+        'categoria' => 'Equipamentos',
+        'marca' => 'Adidas',
+        'preco' => 79.90,
+        'descricao' => '💧 SQUEEZE ISOTÉRMICO. Mantém a bebida fria por mais tempo durante o treino.',
+        'imagem' => 'https://via.placeholder.com/500?text=Squeeze+Adidas',
+        'estoque' => 90,
+        'destaque' => 0,
+        'cores' => 'Preto,Branco,Azul',
+        'tamanhos' => '750ml',
+        'tamanhos_desc' => '750ml(altura 26cm)'
+    ],
+    [
+        'nome' => 'Sacola Esportiva Puma',
+        'categoria' => 'Equipamentos',
+        'marca' => 'Puma',
+        'preco' => 129.90,
+        'descricao' => '🎒 SACOLA MULTIUSO COM COMPARTIMENTO PARA CALÇADOS. Ideal para academia.',
+        'imagem' => 'https://via.placeholder.com/500?text=Sacola+Puma',
+        'estoque' => 50,
+        'destaque' => 0,
+        'cores' => 'Preto,Cinza,Vermelho',
+        'tamanhos' => 'Único',
+        'tamanhos_desc' => 'Único(60x30x25cm)'
     ]
 ];
 
@@ -1104,6 +1286,58 @@ $acessorios = [
         'cores' => 'Preto,Branco,Azul,Rosa',
         'tamanhos' => 'P, M, G, GG',
         'tamanhos_desc' => 'P(33-35cm panturrilha),M(35-38cm),G(38-42cm),GG(42-45cm)'
+    ],
+    [
+        'nome' => 'Luva de Academia Nike',
+        'categoria' => 'Acessórios',
+        'marca' => 'Nike',
+        'preco' => 89.90,
+        'descricao' => '🏋️ LUVA DE ACADEMIA COM ADESÃO E PROTEÇÃO PARA TREINOS DE FORÇA.',
+        'imagem' => 'https://via.placeholder.com/500?text=Luva+Academia+Nike',
+        'estoque' => 80,
+        'destaque' => 0,
+        'cores' => 'Preto,Branco,Azul',
+        'tamanhos' => 'P, M, G',
+        'tamanhos_desc' => 'P(20-22cm mão),M(22-24cm),G(24-26cm)'
+    ],
+    [
+        'nome' => 'Fone Esportivo Bluetooth',
+        'categoria' => 'Acessórios',
+        'marca' => 'Generic',
+        'preco' => 119.90,
+        'descricao' => '🎧 FONE SEM FIO COM PROTEÇÃO IPX5. Ideal para corrida e treino.',
+        'imagem' => 'https://via.placeholder.com/500?text=Fone+Esportivo+Bluetooth',
+        'estoque' => 90,
+        'destaque' => 0,
+        'cores' => 'Preto,Branco,Azul',
+        'tamanhos' => 'Único',
+        'tamanhos_desc' => 'Único(ajustável ao ouvido)'
+    ],
+    [
+        'nome' => 'Cinto de Musculação Reforçado',
+        'categoria' => 'Acessórios',
+        'marca' => 'Generic',
+        'preco' => 99.90,
+        'descricao' => '💪 CINTO DE MUSCULAÇÃO COM APOIO DE COSTAS. Ideal para levantamento de peso.',
+        'imagem' => 'https://via.placeholder.com/500?text=Cinto+Musculacao+Reforcado',
+        'estoque' => 70,
+        'destaque' => 0,
+        'cores' => 'Preto,Azul',
+        'tamanhos' => 'P, M, G, XG',
+        'tamanhos_desc' => 'P(66-76cm cintura),M(76-86cm),G(86-96cm),XG(96-106cm)'
+    ],
+    [
+        'nome' => 'Garrafão de Hidratacao 2L',
+        'categoria' => 'Acessórios',
+        'marca' => 'Generic',
+        'preco' => 79.90,
+        'descricao' => '💧 GARRAFA TRANSPARENTE 2L COM TAMPA ROSQUEÁVEL. Ideal para treino intenso.',
+        'imagem' => 'https://via.placeholder.com/500?text=Garrafao+Hidratacao+2L',
+        'estoque' => 110,
+        'destaque' => 0,
+        'cores' => 'Transparente,Azul',
+        'tamanhos' => '2L',
+        'tamanhos_desc' => '2L(altura 30cm)'
     ]
 ];
 
