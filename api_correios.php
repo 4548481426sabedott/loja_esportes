@@ -35,24 +35,22 @@ foreach ($produtos as $produto) {
     }
 }
 
-// Se o pedido for acima de R$ 299, frete grátis
-if ($valor_total >= 299) {
-    echo json_encode([
-        'success' => true,
-        'frete_gratis' => true,
-        'opcoes' => [
-            [
-                'codigo' => 'FREE',
-                'nome' => 'Frete Grátis',
-                'valor' => 0,
-                'valor_formatado' => 'R$ 0,00',
-                'prazo' => 7,
-                'prazo_texto' => '5 a 7 dias úteis'
-            ]
+// O frete e gratis para qualquer valor de compra.
+echo json_encode([
+    'success' => true,
+    'frete_gratis' => true,
+    'opcoes' => [
+        [
+            'codigo' => 'FREE',
+            'nome' => 'Frete Grátis',
+            'valor' => 0,
+            'valor_formatado' => 'R$ 0,00',
+            'prazo' => 7,
+            'prazo_texto' => '5 a 7 dias úteis'
         ]
-    ]);
-    exit;
-}
+    ]
+]);
+exit;
 
 // Opções de frete dos Correios
 $servicos = [
@@ -134,7 +132,7 @@ if (empty($opcoes_frete)) {
 
 echo json_encode([
     'success' => true,
-    'frete_gratis' => false,
+    'frete_gratis' => true,
     'cep_origem' => $cep_origem,
     'cep_destino' => $cep_destino,
     'peso_total' => number_format($peso_total, 2) . ' kg',

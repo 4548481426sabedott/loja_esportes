@@ -16,23 +16,35 @@ $admin_nome = $_SESSION['admin_nome'];
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Admin - Dashboard</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=2">
 </head>
-<body>
-    <div style="max-width:1100px;margin:2rem auto;">
-        <header style="display:flex;justify-content:space-between;align-items:center;">
+<body class="admin-page">
+    <div class="admin-shell admin-dashboard">
+        <header class="admin-header">
             <h1>Administrador</h1>
-            <div>
+            <div class="admin-user">
                 Olá, <?php echo htmlspecialchars($admin_nome); ?> |
                 <a href="admin_logout.php">Sair</a>
             </div>
         </header>
 
-        <section style="margin-top:2rem; display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:1rem;">
-            <a class="card" href="admin_produtos.php">Gerenciar Produtos</a>
-            <a class="card" href="#">Gerenciar Ofertas</a>
-            <a class="card" href="#">Gerenciar Pedidos</a>
-            <a class="card" href="#">Configurações</a>
+        <section class="admin-intro">
+            <span class="admin-kicker">Painel de controle</span>
+            <h2>O que você deseja gerenciar?</h2>
+            <p>Acompanhe e atualize o catálogo da sua loja.</p>
+        </section>
+
+        <section class="admin-menu">
+            <a class="admin-card admin-card-primary" href="admin_produtos.php">
+                <span class="admin-card-icon">+</span>
+                <span><strong>Produtos</strong><small>Adicionar, editar e organizar o catálogo</small></span>
+                <span class="admin-card-arrow">&#8594;</span>
+            </a>
+            <a class="admin-card" href="admin_pedidos.php">
+                <span class="admin-card-icon">&#9776;</span>
+                <span><strong>Pedidos</strong><small>Consultar e acompanhar pedidos</small></span>
+                <span class="admin-card-arrow">&#8594;</span>
+            </a>
         </section>
     </div>
 </body>

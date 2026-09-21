@@ -150,7 +150,7 @@ foreach ($tamanhos_desc as $td) {
                             <small class="d-block text-muted mt-1">Compra Segura</small>
                         </div>
                     </div>
-                    <small class="text-muted d-block text-center mt-3">*Frete grátis para compras acima de R$ 299</small>
+                    <small class="text-muted d-block text-center mt-3">*Frete grátis para compras de qualquer valor</small>
                 </div>
             </div>
         </div>

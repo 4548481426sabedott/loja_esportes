@@ -11,19 +11,25 @@ $res = mysqli_query($conn, "SELECT * FROM produtos ORDER BY id DESC");
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Admin - Produtos</title>
-    <link rel="stylesheet" href="css/style.css">
-    <style>.table{width:100%;border-collapse:collapse}.table th,.table td{padding:8px;border:1px solid #ddd}</style>
+    <link rel="stylesheet" href="css/style.css?v=2">
 </head>
-<body>
-    <div style="max-width:1100px;margin:2rem auto;">
-        <header style="display:flex;justify-content:space-between;align-items:center;">
+<body class="admin-page">
+    <div class="admin-shell admin-products">
+        <header class="admin-header">
             <h1>Produtos</h1>
-            <div><a href="admin.php">Voltar</a> | <a href="admin_logout.php">Sair</a></div>
+            <div class="admin-user"><a href="admin.php">Voltar</a> <span>|</span> <a href="admin_logout.php">Sair</a></div>
         </header>
 
-        <p><a class="btn" href="admin_produto_editar.php">+ Novo Produto</a></p>
+        <div class="admin-toolbar">
+            <div>
+                <span class="admin-kicker">Catálogo</span>
+                <p class="admin-caption">Gerencie os produtos disponíveis na loja.</p>
+            </div>
+            <a class="admin-button" href="admin_produto_editar.php"><span>+</span> Novo produto</a>
+        </div>
 
-        <table class="table">
+        <div class="admin-table-wrap">
+        <table class="admin-table">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -42,7 +48,7 @@ $res = mysqli_query($conn, "SELECT * FROM produtos ORDER BY id DESC");
                         <td><?php echo $p['id']; ?></td>
                         <td style="width:80px;">
                             <?php if (!empty($p['imagem'])): ?>
-                                <img src="<?php echo htmlspecialchars($p['imagem']); ?>" style="width:64px;height:64px;object-fit:cover;border-radius:4px;">
+                                <img class="admin-product-image" src="<?php echo htmlspecialchars($p['imagem']); ?>">
                             <?php endif; ?>
                         </td>
                         <td><?php echo htmlspecialchars($p['nome']); ?></td>
@@ -58,16 +64,17 @@ $res = mysqli_query($conn, "SELECT * FROM produtos ORDER BY id DESC");
                         <td><?php echo intval($p['estoque']); ?></td>
                         <td>
                             <a href="admin_produto_editar.php?id=<?php echo $p['id']; ?>">Editar</a> |
-                            <form method="POST" action="admin_produto_actions.php" style="display:inline;" onsubmit="return confirm('Confirma exclusão?');">
+                            <form method="POST" action="admin_produto_actions.php" class="admin-delete-form" onsubmit="return confirm('Confirma exclusão?');">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="id" value="<?php echo $p['id']; ?>">
-                                <button type="submit" style="background:none;border:none;color:#c00;cursor:pointer;padding:0;">Excluir</button>
+                                <button type="submit" class="admin-delete">Excluir</button>
                             </form>
                         </td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>
         </table>
+        </div>
     </div>
 </body>
 </html>

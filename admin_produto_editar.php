@@ -17,16 +17,16 @@ if (isset($_GET['id'])) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title><?php echo $is_edit ? 'Editar' : 'Novo'; ?> Produto</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=2">
 </head>
-<body>
-    <div style="max-width:900px;margin:2rem auto;">
-        <header style="display:flex;justify-content:space-between;align-items:center;">
+<body class="admin-page">
+    <div class="admin-shell admin-editor">
+        <header class="admin-header">
             <h1><?php echo $is_edit ? 'Editar' : 'Novo'; ?> Produto</h1>
-            <div><a href="admin_produtos.php">Voltar</a></div>
+            <div class="admin-user"><a href="admin_produtos.php">Voltar</a></div>
         </header>
 
-        <form method="POST" action="admin_produto_actions.php" enctype="multipart/form-data" style="margin-top:1rem;">
+        <form class="admin-form" method="POST" action="admin_produto_actions.php" enctype="multipart/form-data">
             <input type="hidden" name="action" value="save">
             <?php if ($is_edit): ?><input type="hidden" name="id" value="<?php echo $produto['id']; ?>"><?php endif; ?>
 
@@ -45,12 +45,12 @@ if (isset($_GET['id'])) {
                 <input type="text" name="marca" class="form-control" value="<?php echo htmlspecialchars($produto['marca']); ?>">
             </div>
 
-            <div style="display:flex;gap:8px;">
-                <div class="form-group" style="flex:1;">
+            <div class="admin-form-row">
+                <div class="form-group">
                     <label>Preço</label>
                     <input type="number" step="0.01" name="preco" class="form-control" required value="<?php echo htmlspecialchars($produto['preco']); ?>">
                 </div>
-                <div class="form-group" style="flex:1;">
+                <div class="form-group">
                     <label>Preço Promocional</label>
                     <input type="number" step="0.01" name="preco_promocional" class="form-control" value="<?php echo htmlspecialchars($produto['preco_promocional']); ?>">
                 </div>
@@ -83,12 +83,12 @@ if (isset($_GET['id'])) {
             <div class="form-group">
                 <label>Imagem (envie para substituir)</label>
                 <?php if (!empty($produto['imagem'])): ?>
-                    <div style="margin-bottom:8px;"><img src="<?php echo htmlspecialchars($produto['imagem']); ?>" style="width:120px;height:120px;object-fit:cover;border-radius:6px;"></div>
+                    <div class="admin-current-image"><img src="<?php echo htmlspecialchars($produto['imagem']); ?>"></div>
                 <?php endif; ?>
                 <input type="file" name="imagem" accept="image/*">
             </div>
 
-            <button type="submit" class="btn"><?php echo $is_edit ? 'Salvar alterações' : 'Criar produto'; ?></button>
+            <button type="submit" class="admin-button"><?php echo $is_edit ? 'Salvar alterações' : 'Criar produto'; ?></button>
         </form>
     </div>
 </body>

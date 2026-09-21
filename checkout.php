@@ -13,7 +13,12 @@ if (!esta_logado()) {
 
 // Processar finalização
 if (isset($_POST['finalizar'])) {
-    $forma_pagamento = mysqli_real_escape_string($conn, $_POST['forma_pagamento']);
+    $formas_pagamento_permitidas = ['cartao_credito', 'cartao_debito', 'pix'];
+    $forma_pagamento_enviada = $_POST['forma_pagamento'] ?? '';
+    if (!in_array($forma_pagamento_enviada, $formas_pagamento_permitidas, true)) {
+        $erro = 'Selecione uma forma de pagamento válida.';
+    }
+    $forma_pagamento = mysqli_real_escape_string($conn, $forma_pagamento_enviada);
     $telefone = mysqli_real_escape_string($conn, $_POST['telefone']);
     $cep = mysqli_real_escape_string($conn, $_POST['cep']);
     $endereco = mysqli_real_escape_string($conn, $_POST['endereco']);
@@ -22,47 +27,45 @@ if (isset($_POST['finalizar'])) {
     $bairro = mysqli_real_escape_string($conn, $_POST['bairro']);
     $cidade = mysqli_real_escape_string($conn, $_POST['cidade']);
     $estado = mysqli_real_escape_string($conn, $_POST['estado']);
-    $frete_valor = floatval(str_replace(',', '.', $_POST['frete_valor'] ?? 0));
+    $frete_valor = 0;
     
     $endereco_completo = "$endereco, $numero" . ($complemento ? " - $complemento" : "") . " - $bairro, $cidade/$estado - CEP: $cep";
     
-    // Atualizar telefone do usuário
-    $usuario_id = $_SESSION['usuario_id'];
-    $update_telefone = "UPDATE usuarios SET telefone = '$telefone' WHERE id = $usuario_id";
-    mysqli_query($conn, $update_telefone);
+    if (!isset($erro)) {
+        // Atualizar telefone do usuário
+        $usuario_id = $_SESSION['usuario_id'];
+        $update_telefone = "UPDATE usuarios SET telefone = '$telefone' WHERE id = $usuario_id";
+        mysqli_query($conn, $update_telefone);
     
-    // Calcular total
-    $total_produtos = 0;
-    $itens = [];
-    if (isset($_SESSION['carrinho']) && !empty($_SESSION['carrinho'])) {
-        $quantidades = array_count_values($_SESSION['carrinho']);
-        foreach ($quantidades as $id => $qtd) {
-            $sql = "SELECT preco, nome FROM produtos WHERE id = $id";
-            $result = mysqli_query($conn, $sql);
-            $produto = mysqli_fetch_assoc($result);
-            if ($produto) {
-                $subtotal = $produto['preco'] * $qtd;
-                $total_produtos += $subtotal;
-                $itens[] = [
-                    'id' => $id,
-                    'nome' => $produto['nome'],
-                    'quantidade' => $qtd,
-                    'preco' => $produto['preco'],
-                    'subtotal' => $subtotal
-                ];
+        // Calcular total
+        $total_produtos = 0;
+        $itens = [];
+        if (isset($_SESSION['carrinho']) && !empty($_SESSION['carrinho'])) {
+            $quantidades = array_count_values($_SESSION['carrinho']);
+            foreach ($quantidades as $id => $qtd) {
+                $sql = "SELECT preco, nome FROM produtos WHERE id = $id";
+                $result = mysqli_query($conn, $sql);
+                $produto = mysqli_fetch_assoc($result);
+                if ($produto) {
+                    $subtotal = $produto['preco'] * $qtd;
+                    $total_produtos += $subtotal;
+                    $itens[] = [
+                        'id' => $id,
+                        'nome' => $produto['nome'],
+                        'quantidade' => $qtd,
+                        'preco' => $produto['preco'],
+                        'subtotal' => $subtotal
+                    ];
+                }
             }
         }
-    }
-    
-    $total_geral = $total_produtos + $frete_valor;
-    
-    if (empty($itens)) {
-        $erro = "Seu carrinho está vazio!";
-    } else {
+        $total_geral = $total_produtos;
+        if (empty($itens)) {
+            $erro = "Seu carrinho está vazio!";
+        } else {
         // Inserir pedido
         $sql = "INSERT INTO pedidos (usuario_id, total, forma_pagamento, endereco_entrega, status, frete) 
-                VALUES ($usuario_id, $total_geral, '$forma_pagamento', '$endereco_completo', 'pendente', $frete_valor)";
-        
+                VALUES ($usuario_id, $total_geral, '$forma_pagamento', '$endereco_completo', 'pendente', 0)";
         if (mysqli_query($conn, $sql)) {
             $pedido_id = mysqli_insert_id($conn);
             
@@ -108,6 +111,7 @@ if (isset($_POST['finalizar'])) {
             redirect("pedido_sucesso.php?id=$pedido_id");
         } else {
             $erro = "Erro ao processar pedido. Tente novamente.";
+        }
         }
     }
 }
@@ -249,17 +253,7 @@ include("header.php");
                     </div>
                 </div>
                 
-                <div id="freteContainer" style="display: none;">
-                    <h3 style="margin: 2rem 0 1.5rem;">3. Opções de Frete</h3>
-                    <div class="form-group">
-                        <select class="form-control" id="freteOptions" name="frete_opcao" onchange="atualizarTotalFrete(this)">
-                            <option value="">Calculando frete...</option>
-                        </select>
-                        <input type="hidden" name="frete_valor" id="frete_valor" value="0">
-                    </div>
-                </div>
-                
-                <h3 style="margin: 2rem 0 1.5rem;">4. Forma de Pagamento</h3>
+                <h3 style="margin: 2rem 0 1.5rem;">3. Forma de Pagamento</h3>
                 
                 <div class="payment-methods" style="display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 1.5rem !important; margin-bottom: 2rem !important;">
                     <button type="button" class="payment-btn" style="display: flex !important; align-items: center !important; gap: 1.2rem !important; padding: 1.5rem !important; border: 2px solid #e2e8f0 !important; background: white !important; border-radius: 1rem !important; cursor: pointer !important; font-family: 'Inter', sans-serif !important; text-align: left !important; position: relative !important; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important; width: 100% !important; min-height: 120px !important;" onclick="selecionarPagamento(this, 'cartao_credito'); return false;">
@@ -301,18 +295,6 @@ include("header.php");
                         </div>
                     </button>
                     
-                    <button type="button" class="payment-btn" style="display: flex !important; align-items: center !important; gap: 1.2rem !important; padding: 1.5rem !important; border: 2px solid #e2e8f0 !important; background: white !important; border-radius: 1rem !important; cursor: pointer !important; font-family: 'Inter', sans-serif !important; text-align: left !important; position: relative !important; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important; width: 100% !important; min-height: 120px !important;" onclick="selecionarPagamento(this, 'boleto'); return false;">
-                        <div class="payment-icon" style="flex-shrink: 0; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f97316, #dc2626); border-radius: 1rem; color: white; font-size: 1.8rem;">
-                            <i class="fas fa-barcode"></i>
-                        </div>
-                        <div class="payment-info" style="flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center;">
-                            <p class="payment-title" style="margin: 0; font-weight: 700; font-size: 1rem; color: #1e293b; line-height: 1.2;">Boleto Bancário</p>
-                            <small class="payment-desc" style="display: block; color: #64748b; font-size: 0.85rem; margin-top: 0.3rem; font-weight: 500;">Vencimento em 3 dias</small>
-                        </div>
-                        <div class="payment-check" style="flex-shrink: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: transparent; font-size: 1.5rem;">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                    </button>
                 </div>
                 
                 <input type="hidden" name="forma_pagamento" id="forma_pagamento" required>
@@ -348,11 +330,6 @@ include("header.php");
                 </div>
             <?php endforeach; ?>
             
-            <div class="resumo-item" id="freteResumo" style="display: none;">
-                <span>Frete</span>
-                <span id="freteValorResumo"><strong>A calcular</strong></span>
-            </div>
-            
             <div class="resumo-total">
                 <span><strong>Total</strong></span>
                 <span><strong id="totalGeral"><?php echo formatar_preco($total); ?></strong></span>
@@ -371,7 +348,6 @@ include("header.php");
 
 <script>
 let pagamentoSelecionado = null;
-let freteSelecionado = null;
 
 function selecionarPagamento(btnElement, tipo) {
     // Remover classe selected de todos os botões
@@ -419,7 +395,8 @@ function buscarCEP(cep) {
                     document.querySelector('input[name="bairro"]').value = data.bairro || '';
                     document.querySelector('input[name="cidade"]').value = data.localidade || '';
                     document.querySelector('select[name="estado"]').value = data.uf || '';
-                    calcularFrete();
+                    document.getElementById('frete_valor')?.remove();
+                    atualizarTotalFinal(0);
                 } else {
                     mostrarMensagem('CEP não encontrado!', 'error');
                 }
@@ -431,78 +408,9 @@ function buscarCEP(cep) {
     }
 }
 
-function calcularFrete() {
-    const cep = document.getElementById('cep').value.replace(/\D/g, '');
-    if (cep.length !== 8) return;
-    
-    const produtos = <?php 
-        $produtos_json = [];
-        foreach ($itens_carrinho as $item) {
-            $produtos_json[] = ['id' => $item['id'], 'quantidade' => $item['quantidade']];
-        }
-        echo json_encode($produtos_json);
-    ?>;
-    
-    if (produtos.length === 0) return;
-    
-    showLoading('Calculando frete...');
-    
-    fetch(`api_correios.php?cep=${cep}&produtos=${encodeURIComponent(JSON.stringify(produtos))}`)
-        .then(response => response.json())
-        .then(data => {
-            hideLoading();
-            
-            if (data.success && data.opcoes && data.opcoes.length > 0) {
-                const freteContainer = document.getElementById('freteContainer');
-                const freteOptions = document.getElementById('freteOptions');
-                const freteResumo = document.getElementById('freteResumo');
-                
-                if (data.frete_gratis) {
-                    freteContainer.style.display = 'none';
-                    freteResumo.style.display = 'flex';
-                    document.getElementById('freteValorResumo').innerHTML = '<strong class="text-success">Grátis</strong>';
-                    document.getElementById('frete_valor').value = 0;
-                    atualizarTotalFinal(0);
-                } else {
-                    freteContainer.style.display = 'block';
-                    freteResumo.style.display = 'flex';
-                    
-                    let html = '<option value="">Selecione uma opção de frete</option>';
-                    data.opcoes.forEach((opcao, index) => {
-                        html += `<option value="${opcao.valor}" data-prazo="${opcao.prazo}">
-                            ${opcao.nome} - ${opcao.valor_formatado} (${opcao.prazo_texto})
-                        </option>`;
-                    });
-                    freteOptions.innerHTML = html;
-                    
-                    if (data.opcoes.length === 1) {
-                        freteOptions.value = data.opcoes[0].valor;
-                        atualizarTotalFrete(freteOptions);
-                    }
-                }
-            } else {
-                mostrarMensagem('Não foi possível calcular o frete', 'error');
-            }
-        })
-        .catch(error => {
-            hideLoading();
-            console.error('Erro:', error);
-            mostrarMensagem('Erro ao calcular frete', 'error');
-        });
-}
-
-function atualizarTotalFrete(selectElement) {
-    const valorFrete = parseFloat(selectElement.value) || 0;
-    document.getElementById('frete_valor').value = valorFrete;
-    const freteFormatado = valorFrete > 0 ? formatarPrecoReal(valorFrete) : 'Grátis';
-    document.getElementById('freteValorResumo').innerHTML = `<strong>${freteFormatado}</strong>`;
-    atualizarTotalFinal(valorFrete);
-}
-
-function atualizarTotalFinal(valorFrete) {
+function atualizarTotalFinal() {
     const totalProdutos = <?php echo $total; ?>;
-    const totalGeral = totalProdutos + valorFrete;
-    document.getElementById('totalGeral').innerHTML = formatarPrecoReal(totalGeral);
+    document.getElementById('totalGeral').innerHTML = formatarPrecoReal(totalProdutos);
 }
 
 function formatarPrecoReal(valor) {

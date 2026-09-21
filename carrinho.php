@@ -147,19 +147,13 @@ if (isset($_SESSION['carrinho']) && !empty($_SESSION['carrinho']) && is_array($_
                         <div class="d-flex justify-content-between mb-3">
                             <span>Frete</span>
                             <span class="text-success">
-                                <?php echo $total >= 299 ? '<i class="fas fa-check-circle me-1"></i> Grátis' : 'A calcular'; ?>
+                                <i class="fas fa-check-circle me-1"></i> Grátis
                             </span>
                         </div>
                         
-                        <?php if($total >= 299): ?>
-                            <div class="alert alert-success mb-3 py-2">
-                                <i class="fas fa-truck me-2"></i> Parabéns! Você ganhou frete grátis!
-                            </div>
-                        <?php else: ?>
-                            <div class="alert alert-info mb-3 py-2">
-                                <i class="fas fa-info-circle me-2"></i> Faltam R$ <?php echo number_format(299 - $total, 2, ',', '.'); ?> para frete grátis
-                            </div>
-                        <?php endif; ?>
+                        <div class="alert alert-success mb-3 py-2">
+                            <i class="fas fa-truck me-2"></i> Frete grátis em qualquer compra!
+                        </div>
                         
                         <hr>
                         

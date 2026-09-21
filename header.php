@@ -133,6 +133,51 @@ $categorias = ['Chuteiras', 'Camisas', 'Tênis', 'Meias', 'Equipamentos', 'Acess
             color: white;
             transform: translateY(-2px);
         }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            margin-right: 0.5rem;
+        }
+
+        .search-input {
+            width: 190px;
+            border: 1px solid #dbe2ea;
+            border-radius: 20px 0 0 20px;
+            padding: 0.5rem 0.75rem;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+        }
+
+        .search-button {
+            border: none;
+            border-radius: 0 20px 20px 0;
+            padding: 0.5rem 0.75rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .header-actions {
+            transform: translateX(55px);
+        }
+
+        @media (max-width: 991px) {
+            .header-actions {
+                transform: none;
+            }
+
+            .search-form {
+                margin: 1rem 0;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+        }
         
         .btn-gradient {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -337,14 +382,16 @@ $categorias = ['Chuteiras', 'Camisas', 'Tênis', 'Meias', 'Equipamentos', 'Acess
                     </a>
                 </li>
                 <?php endforeach; ?>
-                <li class="nav-item">
-                    <a class="nav-link nav-link-custom" href="ofertas.php">
-                        <i class="fas fa-fire text-danger"></i> Ofertas
-                    </a>
-                </li>
             </ul>
             
-            <div class="d-flex gap-2">
+            <div class="header-actions d-flex align-items-center gap-2">
+                <form class="search-form" action="busca.php" method="get">
+                    <input class="search-input" type="search" name="q" placeholder="Buscar produtos..." aria-label="Buscar produtos" required>
+                    <button class="search-button" type="submit" aria-label="Pesquisar">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+
                 <a href="carrinho.php" class="icon-btn cart-icon position-relative">
                     <i class="fas fa-shopping-cart"></i>
                     <?php if($cart_count > 0): ?>

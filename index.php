@@ -3,7 +3,7 @@ include("header.php");
 ?>
 
 <!-- Hero Section -->
-<section class="hero-premium text-white text-center">
+<section class="hero-premium text-center" style="color: #540b7e;">
     <div class="container position-relative" style="z-index: 1;">
         <h1 class="hero-title mb-4">
             🏆 NOVA COLEÇÃO ESPORTIVA 2026
@@ -107,7 +107,7 @@ include("header.php");
                 <div class="p-4">
                     <i class="fas fa-truck fa-3x text-primary mb-3"></i>
                     <h5 class="fw-bold">🚚 Frete Grátis</h5>
-                    <p class="text-muted">Para compras acima de R$ 299</p>
+                    <p class="text-muted">Para compras de qualquer valor</p>
                 </div>
             </div>
             <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">

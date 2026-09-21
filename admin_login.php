@@ -30,11 +30,12 @@ if (isset($_POST['login'])) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Admin - Login</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=2">
 </head>
-<body style="background: #f4f4f4; display:flex; align-items:center; justify-content:center; min-height:100vh;">
-    <div style="background:white; padding:2rem; border-radius:8px; width:100%; max-width:420px; box-shadow:0 6px 20px rgba(0,0,0,0.08);">
-        <h2 style="margin-top:0;">Painel Administrativo</h2>
+<body class="admin-page admin-login-page">
+    <div class="admin-login-card">
+        <span class="admin-kicker">SPORTSHOP</span>
+        <h2>Painel Administrativo</h2>
         <?php if (isset($erro)): ?>
             <div class="alert alert-error"><?php echo $erro; ?></div>
         <?php endif; ?>
