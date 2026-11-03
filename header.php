@@ -140,6 +140,83 @@ $categorias = ['Chuteiras', 'Camisas', 'Tênis', 'Meias', 'Equipamentos', 'Acess
             margin-right: 0.5rem;
         }
 
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-suggestions {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            z-index: 1100;
+            display: none;
+            max-height: 360px;
+            overflow-y: auto;
+            background: #fff;
+            border: 1px solid #dbe2ea;
+            border-radius: 10px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+        }
+
+        .search-suggestions.is-visible {
+            display: block;
+        }
+
+        .search-suggestion {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.65rem 0.75rem;
+            color: #263238;
+            text-decoration: none;
+        }
+
+        .search-suggestion + .search-suggestion {
+            border-top: 1px solid #edf0f4;
+        }
+
+        .search-suggestion:hover,
+        .search-suggestion:focus {
+            background: #f5f7fa;
+            color: #263238;
+        }
+
+        .search-suggestion img {
+            width: 44px;
+            height: 44px;
+            flex: 0 0 44px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .search-suggestion-info {
+            min-width: 0;
+        }
+
+        .search-suggestion-name,
+        .search-suggestion-meta {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .search-suggestion-name {
+            font-weight: 600;
+        }
+
+        .search-suggestion-meta {
+            color: #65717d;
+            font-size: 0.82rem;
+        }
+
+        .search-suggestions-status {
+            padding: 0.75rem;
+            color: #65717d;
+            font-size: 0.9rem;
+        }
+
         .search-input {
             width: 190px;
             border: 1px solid #dbe2ea;
@@ -385,12 +462,15 @@ $categorias = ['Chuteiras', 'Camisas', 'Tênis', 'Meias', 'Equipamentos', 'Acess
             </ul>
             
             <div class="header-actions d-flex align-items-center gap-2">
-                <form class="search-form" action="busca.php" method="get">
-                    <input class="search-input" type="search" name="q" placeholder="Buscar produtos..." aria-label="Buscar produtos" required>
-                    <button class="search-button" type="submit" aria-label="Pesquisar">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </form>
+                <div class="search-wrapper">
+                    <form class="search-form" action="busca.php" method="get">
+                        <input class="search-input" type="search" name="q" placeholder="Buscar produtos..." aria-label="Buscar produtos" aria-controls="search-suggestions" aria-expanded="false" autocomplete="off" required>
+                        <button class="search-button" type="submit" aria-label="Pesquisar">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                    <div class="search-suggestions" id="search-suggestions" role="listbox" aria-label="Produtos relacionados"></div>
+                </div>
 
                 <a href="carrinho.php" class="icon-btn cart-icon position-relative">
                     <i class="fas fa-shopping-cart"></i>

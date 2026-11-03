@@ -59,6 +59,102 @@
         duration: 1000,
         once: true
     });
+
+    const searchInput = document.querySelector('.search-input');
+    const searchSuggestions = document.querySelector('#search-suggestions');
+
+    if (searchInput && searchSuggestions) {
+        let searchTimer;
+        let activeRequest;
+
+        const hideSuggestions = () => {
+            searchSuggestions.classList.remove('is-visible');
+            searchInput.setAttribute('aria-expanded', 'false');
+        };
+
+        const showStatus = (message) => {
+            searchSuggestions.replaceChildren();
+            const status = document.createElement('div');
+            status.className = 'search-suggestions-status';
+            status.textContent = message;
+            searchSuggestions.append(status);
+            searchSuggestions.classList.add('is-visible');
+            searchInput.setAttribute('aria-expanded', 'true');
+        };
+
+        searchInput.addEventListener('input', () => {
+            const termo = searchInput.value.trim();
+            window.clearTimeout(searchTimer);
+            if (activeRequest) activeRequest.abort();
+
+            if (termo.length < 2) {
+                hideSuggestions();
+                return;
+            }
+
+            searchTimer = window.setTimeout(async () => {
+                activeRequest = new AbortController();
+                showStatus('Buscando produtos...');
+
+                try {
+                    const response = await fetch(`busca_sugestoes.php?q=${encodeURIComponent(termo)}`, {
+                        signal: activeRequest.signal
+                    });
+                    if (!response.ok) throw new Error('Falha na busca');
+                    const produtos = await response.json();
+
+                    if (searchInput.value.trim() !== termo) return;
+                    searchSuggestions.replaceChildren();
+
+                    if (produtos.length === 0) {
+                        showStatus('Nenhum produto encontrado.');
+                        return;
+                    }
+
+                    produtos.forEach((produto) => {
+                        const link = document.createElement('a');
+                        link.className = 'search-suggestion';
+                        link.href = `produto.php?id=${encodeURIComponent(produto.id)}`;
+                        link.setAttribute('role', 'option');
+
+                        const image = document.createElement('img');
+                        image.src = produto.imagem || '';
+                        image.alt = '';
+
+                        const info = document.createElement('span');
+                        info.className = 'search-suggestion-info';
+
+                        const name = document.createElement('span');
+                        name.className = 'search-suggestion-name';
+                        name.textContent = produto.nome;
+
+                        const meta = document.createElement('span');
+                        meta.className = 'search-suggestion-meta';
+                        meta.textContent = `${produto.marca || produto.categoria || ''} - R$ ${Number(produto.preco).toFixed(2).replace('.', ',')}`;
+
+                        info.append(name, meta);
+                        link.append(image, info);
+                        searchSuggestions.append(link);
+                    });
+
+                    searchSuggestions.classList.add('is-visible');
+                    searchInput.setAttribute('aria-expanded', 'true');
+                } catch (error) {
+                    if (error.name !== 'AbortError') hideSuggestions();
+                }
+            }, 250);
+        });
+
+        searchInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') hideSuggestions();
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!searchSuggestions.contains(event.target) && !searchInput.contains(event.target)) {
+                hideSuggestions();
+            }
+        });
+    }
 </script>
 
 <style>
