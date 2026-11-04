@@ -25,7 +25,8 @@ echo "<!DOCTYPE html>
         <p>Consultando CEP: <strong>01001000</strong> (São Paulo - Sé)</p>";
         
 $cep = "01001000";
-$ch = curl_init("http://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']) . "/api_cep.php?cep={$cep}");
+$basePath = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/');
+$ch = curl_init("http://" . $_SERVER['HTTP_HOST'] . $basePath . "/api_cep.php?cep={$cep}");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 $response = curl_exec($ch);
@@ -53,7 +54,7 @@ echo "<h2>📌 2. Teste API Correios (Frete)</h2>";
 echo "<p>Calculando frete para CEP: <strong>04538000</strong> (São Paulo - Brooklin)</p>";
 
 $produtos = json_encode([['id' => 1, 'quantidade' => 1], ['id' => 2, 'quantidade' => 1]]);
-$ch = curl_init("http://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']) . "/api_correios.php?cep=04538000&produtos=" . urlencode($produtos));
+$ch = curl_init("http://" . $_SERVER['HTTP_HOST'] . $basePath . "/api_correios.php?cep=04538000&produtos=" . urlencode($produtos));
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 $response = curl_exec($ch);
@@ -74,8 +75,8 @@ echo "</div>";
 echo "<div class='card'>";
 echo "<h2>📌 3. Teste Configuração Mailer</h2>";
 
-if (file_exists('config_mail.php')) {
-    include('config_mail.php');
+if (file_exists(dirname(__DIR__) . '/config_mail.php')) {
+    include(dirname(__DIR__) . '/config_mail.php');
     echo "<p class='success'>✅ config_mail.php encontrado!</p>";
     
     if (function_exists('enviar_email_simples')) {
@@ -95,12 +96,12 @@ echo "</div>";
 echo "<div class='card'>";
 echo "<h2>📌 4. Resumo das APIs</h2>";
 echo "<ul>
-    <li><strong>API CEP:</strong> http://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']) . "/api_cep.php?cep=01001000</li>
-    <li><strong>API Correios:</strong> http://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']) . "/api_correios.php?cep=04538000&produtos=[{\"id\":1,\"quantidade\":1}]</li>
+    <li><strong>API CEP:</strong> http://" . $_SERVER['HTTP_HOST'] . $basePath . "/api_cep.php?cep=01001000</li>
+    <li><strong>API Correios:</strong> http://" . $_SERVER['HTTP_HOST'] . $basePath . "/api_correios.php?cep=04538000&produtos=[{\"id\":1,\"quantidade\":1}]</li>
     <li><strong>Config Mailer:</strong> config_mail.php</li>
 </ul>";
 echo "</div>";
 
-echo "<a href='index.php' class='btn'>🏠 Voltar para a Loja</a>";
+echo "<a href='" . $basePath . "/' class='btn'>🏠 Voltar para a Loja</a>";
 echo "</div></body></html>";
 ?>

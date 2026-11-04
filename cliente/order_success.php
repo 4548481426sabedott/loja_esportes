@@ -1,5 +1,5 @@
 <?php
-include("header.php");
+require_once __DIR__ . '/../header.php';
 
 $id = mysqli_real_escape_string($conn, $_GET['id']);
 
@@ -155,4 +155,4 @@ if (!$pedido) {
     </div>
 </div>
 
-<?php include("footer.php"); ?>
+<?php require_once __DIR__ . '/../footer.php'; ?>

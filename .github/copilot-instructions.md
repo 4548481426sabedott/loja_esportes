@@ -14,7 +14,7 @@ Como ajudar
 Visão curta do projeto
 --
 - PHP + MySQL (phpMyAdmin). Executar em XAMPP/Apache no Windows.
-- Estrutura principal: arquivos PHP na raiz, `css/`, `cache/`.
+- Estrutura principal: implementacoes de paginas em `cliente/`, `admin/` e `api/`; arquivos PHP publicos na raiz encaminham para elas, preservando as URLs. Includes compartilhados ficam na raiz; `scripts/` para manutencao; `tests/` para testes; `db/`, `css/`, `cache/` e `uploads/` para dados e recursos.
 - Principais páginas: index.php, produto.php, carrinho.php, checkout.php, login.php.
 
 Convenções e limites
@@ -74,4 +74,3 @@ Quando pedir ao usuário
 Observação final
 --
 Siga estas diretrizes para trabalhar como assistente parceiro: seja cuidadoso, peça permissão para mudanças grandes e prefira progressos incrementais.
-

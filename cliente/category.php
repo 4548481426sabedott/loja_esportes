@@ -1,5 +1,5 @@
 <?php
-include("header.php");
+require_once __DIR__ . '/../header.php';
 
 $categoria = isset($_GET['cat']) ? mysqli_real_escape_string($conn, $_GET['cat']) : '';
 
@@ -92,4 +92,4 @@ $total_produtos = mysqli_num_rows($result);
     <?php endif; ?>
 </div>
 
-<?php include("footer.php"); ?>
+<?php require_once __DIR__ . '/../footer.php'; ?>

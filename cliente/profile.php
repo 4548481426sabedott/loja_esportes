@@ -1,5 +1,5 @@
 <?php
-include("header.php");
+require_once __DIR__ . '/../header.php';
 
 if (!esta_logado()) {
     $_SESSION['mensagem'] = [
@@ -52,4 +52,4 @@ $usuario = mysqli_fetch_assoc($result);
     </div>
 </div>
 
-<?php include("footer.php"); ?>
+<?php require_once __DIR__ . '/../footer.php'; ?>

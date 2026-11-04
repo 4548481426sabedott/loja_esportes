@@ -1,7 +1,7 @@
 <?php
 // Processar ANTES de qualquer output (antes de include header.php)
-include("config_mail.php");
-require_once("conexao.php");
+require_once __DIR__ . '/../config_mail.php';
+require_once __DIR__ . '/../conexao.php';
 
 if (!esta_logado()) {
     $_SESSION['mensagem'] = [
@@ -97,7 +97,7 @@ if (isset($_POST['finalizar'])) {
             unset($_SESSION['carrinho_detalhes']);
             // Caso pagamento por PIX, gerar QR e salvar na sessão para exibição
             if ($forma_pagamento === 'pix') {
-                require_once __DIR__ . '/pix_helper.php';
+                require_once __DIR__ . '/../pix_helper.php';
                 $reference = "Pedido #" . str_pad($pedido_id, 6, '0', STR_PAD_LEFT);
                 $pix_result = generate_pix_qr(number_format($total_geral, 2, '.', ''), $reference);
                 $_SESSION['pix_qr'] = $pix_result;
@@ -150,7 +150,7 @@ if (empty($itens_carrinho)) {
 }
 
 // Incluir header DEPOIS de todo processamento
-include("header.php");
+require_once __DIR__ . '/../header.php';
 ?>
 
 <div class="container">
@@ -494,4 +494,4 @@ document.getElementById('checkoutForm').addEventListener('submit', function(e) {
 .text-success { color: #10b981 !important; }
 </style>
 
-<?php include("footer.php"); ?>
+<?php require_once __DIR__ . '/../footer.php'; ?>

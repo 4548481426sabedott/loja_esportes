@@ -1,6 +1,6 @@
 <?php
-include("conexao.php");
-include("header.php");
+require_once __DIR__ . '/../conexao.php';
+require_once __DIR__ . '/../header.php';
 
 if (!esta_logado()) {
     $_SESSION['mensagem'] = [
@@ -142,4 +142,4 @@ while ($item = mysqli_fetch_assoc($result_itens)) {
     </div>
 </div>
 
-<?php include("footer.php"); ?>
+<?php require_once __DIR__ . '/../footer.php'; ?>

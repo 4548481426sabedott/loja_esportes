@@ -131,6 +131,16 @@ flowchart LR
     I[Administrador] --> J[Produtos e pedidos]
 ```
 
+Os arquivos foram agrupados por responsabilidade sem alterar as URLs publicas existentes:
+
+- `cliente/`: implementacao das paginas e acoes da loja. Os arquivos PHP publicos na raiz encaminham as requisicoes para esta pasta.
+- `admin/`: implementacao das paginas e acoes administrativas. Os arquivos `admin_*.php` na raiz encaminham as requisicoes para esta pasta.
+- `api/`: implementacao das APIs de CEP, frete, sugestoes de busca e PIX. Os endpoints originais continuam disponiveis na raiz.
+- `scripts/`: rotinas administrativas de importacao de produtos e atualizacao de imagens.
+- `tests/`: pagina auxiliar para testar as APIs.
+- `db/`, `css/`, `uploads/` e `cache/`: banco de dados, estilos, imagens enviadas e cache.
+- Os componentes PHP compartilhados permanecem na raiz; os encaminhadores preservam os links e formularios atuais.
+
 As principais paginas e responsabilidades sao:
 
 - `index.php`: pagina inicial e produtos em destaque.

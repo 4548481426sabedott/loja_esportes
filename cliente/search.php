@@ -1,5 +1,5 @@
 <?php
-include("header.php");
+require_once __DIR__ . '/../header.php';
 
 $termo = isset($_GET['q']) ? trim($_GET['q']) : '';
 $termo_sql = mysqli_real_escape_string($conn, $termo);
@@ -85,4 +85,4 @@ if ($termo !== '') {
     <?php endif; ?>
 </div>
 
-<?php include("footer.php"); ?>
+<?php require_once __DIR__ . '/../footer.php'; ?>

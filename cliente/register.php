@@ -1,5 +1,5 @@
 <?php
-include("conexao.php");
+require_once __DIR__ . '/../conexao.php';
 session_start();
 
 if (isset($_POST['cadastrar'])) {
